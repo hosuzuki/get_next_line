@@ -1,39 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:53 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/10 09:33:45 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/10 19:06:21 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
+# include<stdio.h>
+# include<unistd.h>
+# include<stdlib.h>
 
-# define SUCCESS 1
-# define END 0
+# define GOOD 1
 # define ERROR -1
+# define END 0
 
-typedef struct s_list
+typedef struct sllist
 {
-	int				fd;
-	char			*str;
-	struct s_list	*next;
-}	t_list;
+	int fd;
+	char *str;
+	struct sllist *next;
+}	node;
 
-char		*get_next_line(int fd);
-char		*ft_strjoin(char const *s1, char const *s2);
-char		*ft_strndup(const char *src, size_t n);
-char		*ft_strchr(const char *s, int c);
-size_t		ft_strlen(const char *s);
-t_list		*ft_lstnew(int fd, char *content);
-t_list		*ft_setlst(t_list **s_buff, int fd);
+
+size_t	ft_strlen(const char *s);
+char	*ft_strjoin(const char *s1, const char *s2);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strndup(const char *content, size_t len);
+node	*ft_lstnew(int fd, void *content);
+
+//void	ft_free_lst(node *holder);
+//node	*ft_create_lst(int fd, node *holder);
+char	*get_next_line(int fd);
 
 #endif
