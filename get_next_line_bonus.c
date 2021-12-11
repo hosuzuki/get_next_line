@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 14:35:22 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 16:51:39 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void	ft_free_lst(t_node **holder, t_node *buf_lst)
 	t_node	*tmp;
 
 	if (!holder || !(*holder))
-		return;
-	if(*holder == buf_lst)
+		return ;
+	if (*holder == buf_lst)
 		*holder = buf_lst->next;
-	else 
+	else
 	{
 		tmp = *holder;
 		while (tmp && tmp->next != buf_lst)
@@ -42,7 +42,7 @@ static char	*ft_create_ret(t_node *buf_lst)
 	if (!isnewl)
 	{
 		if (*(buf_lst->str) == '\0')
-			return (NULL);;
+			return (NULL);
 		ret = ft_strndup(buf_lst->str, ft_strlen(buf_lst->str));
 	}
 	else
@@ -93,11 +93,6 @@ static t_node	*ft_create_lst(int fd, t_node **holder)
 		return (buf_lst);
 	}
 	buf_lst = *holder;
-/*	while (buf_lst && buf_lst->fd != fd)
-		buf_lst = buf_lst->next;
-	if (buf_lst)
-		return (buf_lst);
-*/
 	while (buf_lst)
 	{
 		if (buf_lst->fd == fd)
@@ -113,9 +108,9 @@ static t_node	*ft_create_lst(int fd, t_node **holder)
 char	*get_next_line(int fd)
 {
 	static t_node	*holder;
-	t_node		*buf_lst;
-	char		*ret;
-	int			status;
+	t_node			*buf_lst;
+	char			*ret;
+	int				status;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
