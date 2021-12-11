@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/10 22:49:20 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 11:38:50 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	ft_free_lst(node *holder)
 {
 	node	*tmp;
-	
+
 	while (holder)
 	{
 		tmp = holder->next;
@@ -28,21 +28,16 @@ static void	ft_free_lst(node *holder)
 static char	*ft_create_ret(node *buf_lst)
 {
 	char	*ret;
-	char	*ptr;
+	char	*isnewl;
 	char	*tmp;
 
-	ptr = ft_strchr(buf_lst->str, '\n');
-	if (!ptr)
-	{
-		if (*(buf_lst->str) == '\0')
-			ret = ft_strndup(buf_lst->str, 1);
-		else
-			ret = ft_strndup(buf_lst->str, ft_strlen(buf_lst->str) + 1);
-	}
+	isnewl = ft_strchr(buf_lst->str, '\n');
+	if (!isnewl)
+		ret = ft_strndup(buf_lst->str, ft_strlen(buf_lst->str));
 	else
 	{
-		ret = ft_strndup(buf_lst->str, ptr - buf_lst->str + 1);
-		tmp = ft_strndup(ptr + 1, ft_strlen(ptr + 1));
+		ret = ft_strndup(buf_lst->str, isnewl - buf_lst->str + 1);
+		tmp = ft_strndup(isnewl + 1, ft_strlen(isnewl + 1));
 		free (buf_lst->str);
 		buf_lst->str = tmp;
 	}
@@ -59,11 +54,10 @@ static int	ft_read(int fd, node *buf_lst)
 		buf = NULL;
 		if (ft_strchr(buf_lst->str, '\n'))
 			return (GOOD);
-		buf = (char	*)malloc(sizeof(char) * BUFFER_SIZE + 1);
+		buf = (char *)malloc(sizeof(char) * (size_t)BUFFER_SIZE + 1);
 		if (!buf)
 			return (ERROR);
 		rc = read(fd, buf, BUFFER_SIZE);
-//		printf("ft_read\n");
 		if (rc < 0)
 		{
 			free(buf);
@@ -72,7 +66,6 @@ static int	ft_read(int fd, node *buf_lst)
 		if (rc == 0)
 			return (END);
 		buf[BUFFER_SIZE] = '\0';
-//		printf("buf_lst->str:\n%s\n", buf_lst->str);
 		buf_lst->str = ft_strjoin(buf_lst->str, buf);
 		free (buf);
 	}
@@ -81,12 +74,11 @@ static int	ft_read(int fd, node *buf_lst)
 static node	*ft_create_lst(int fd, node **holder)
 {
 	node	*buf_lst;
-	
+
 	if (!(*holder))
 	{
 		buf_lst = ft_lstnew(fd, "");
 		*holder = buf_lst;
-//		printf("(in ft_creat_lst1)fd = %d\n",fd);
 		return (buf_lst);
 	}
 	buf_lst = *holder;
@@ -94,12 +86,9 @@ static node	*ft_create_lst(int fd, node **holder)
 	{
 		if (buf_lst->fd == fd)
 			return (buf_lst);
-//		if (buf_lst == *holder)
-//			break;
 		buf_lst = buf_lst->next;
 	}
 	buf_lst = ft_lstnew(fd, "");
-//	printf("(in ft_creat_lst2)fd = %d\n",fd);
 	buf_lst->next = *holder;
 	*holder = buf_lst;
 	return (buf_lst);
@@ -107,12 +96,11 @@ static node	*ft_create_lst(int fd, node **holder)
 
 char	*get_next_line(int fd)
 {
-	static node *holder;
-	node	*buf_lst;
-//	char	*buf;
-	char	*ret;
-	int	status;
-	
+	static node	*holder;
+	node		*buf_lst;
+	char		*ret;
+	int			status;
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!holder)
