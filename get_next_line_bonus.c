@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 16:51:39 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 17:34:14 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static char	*ft_create_ret(t_node *buf_lst)
 	{
 		ret = ft_strndup(buf_lst->str, isnewl - buf_lst->str + 1);
 		tmp = ft_strndup(isnewl + 1, ft_strlen(isnewl + 1));
+		if (!tmp)
+			return (NULL);
 		free (buf_lst->str);
 		buf_lst->str = tmp;
 	}
@@ -78,6 +80,8 @@ static int	ft_read(int fd, t_node *buf_lst)
 			return (END);
 		buf[rc] = '\0';
 		buf_lst->str = ft_strjoin(buf_lst->str, buf);
+		if (!(buf_lst->str))
+			return (ERROR);
 		free (buf);
 	}
 }
@@ -100,6 +104,8 @@ static t_node	*ft_create_lst(int fd, t_node **holder)
 		buf_lst = buf_lst->next;
 	}
 	buf_lst = ft_lstnew(fd, "");
+	if (!buf_lst)
+		return (buf_lst);
 	buf_lst->next = *holder;
 	*holder = buf_lst;
 	return (buf_lst);
@@ -117,6 +123,8 @@ char	*get_next_line(int fd)
 	if (!holder)
 		holder = NULL;
 	buf_lst = ft_create_lst(fd, &holder);
+	if (!buf_lst)
+		return (NULL);
 	status = ft_read(fd, buf_lst);
 	if (status == ERROR)
 	{
