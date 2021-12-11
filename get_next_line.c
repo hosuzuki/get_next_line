@@ -6,99 +6,106 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 13:40:41 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 18:02:30 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	ft_free_buf(t_list **holder, t_list *buf_lst)
+static void	ft_free_lst(t_node **holder, t_node *buf_lst)
 {
-	t_list	*tmp;
+	t_node	*tmp;
 
 	if (!holder || !(*holder))
 		return ;
 	if (*holder == buf_lst)
-	{
 		*holder = buf_lst->next;
-		free(buf_lst->str);
-		free(buf_lst);
-		return ;
+	else
+	{
+		tmp = *holder;
+		while (tmp && tmp->next != buf_lst)
+			tmp = tmp->next;
+		tmp->next = buf_lst->next;
 	}
-	tmp = *holder;
-	while (tmp && (tmp->next != buf_lst))
-		tmp = tmp->next;
-	tmp->next = buf_lst->next;
-	free(buf_lst->str);
-	free(buf_lst);
+	free (buf_lst->str);
+	free (buf_lst);
+	return ;
 }
 
-static int	ft_create_ret(t_list **buf_lst, char *isnewl, char **ret)
+static char	*ft_create_ret(t_node *buf_lst)
 {
+	char	*ret;
+	char	*isnewl;
 	char	*tmp;
 
-	if (isnewl)
+	isnewl = ft_strchr(buf_lst->str, '\n');
+	if (!isnewl)
 	{
-		*ret = ft_strndup((*buf_lst)->str, isnewl - ((*buf_lst)->str) + 1);
-		tmp = ft_strndup(isnewl + 1, ft_strlen(isnewl + 1));
-		free((*buf_lst)->str);
-		(*buf_lst)->str = tmp;
-		return (SUCCESS);
+		if (*(buf_lst->str) == '\0')
+			return (NULL);
+		ret = ft_strndup(buf_lst->str, ft_strlen(buf_lst->str));
 	}
 	else
 	{
-		if ((*buf_lst)->str && *((*buf_lst)->str) == '\0')
-			*ret = NULL;
-		else
-		{
-			*ret = ft_strndup((*buf_lst)->str, ft_strlen((*buf_lst)->str));
-			tmp = ft_strndup("", 0);
-			free((*buf_lst)->str);
-			(*buf_lst)->str = tmp;
-		}
-		return (END);
+		ret = ft_strndup(buf_lst->str, isnewl - buf_lst->str + 1);
+		tmp = ft_strndup(isnewl + 1, ft_strlen(isnewl + 1));
+		if (!tmp)
+			return (NULL);
+		free (buf_lst->str);
+		buf_lst->str = tmp;
 	}
+	return (ret);
 }
 
-static int	ft_read(t_list *buf_lst, char *buf, char **ret)
+static int	ft_read(int fd, t_node *buf_lst)
 {
 	ssize_t	rc;
-	char	*tmp;
-	char	*isnewl;
+	char	*buf;
 
 	while (1)
 	{
-		isnewl = ft_strchr(buf_lst->str, '\n');
-		if (isnewl)
-			return (ft_create_ret(&buf_lst, isnewl, ret));
-		rc = read(buf_lst->fd, buf, BUFFER_SIZE);
-		if (rc == -1)
+		buf = NULL;
+		if (ft_strchr(buf_lst->str, '\n'))
+			return (GOOD);
+		buf = (char *)malloc(sizeof(char) * (size_t)BUFFER_SIZE + 1);
+		if (!buf)
 			return (ERROR);
-		else if (rc == 0)
-			return (ft_create_ret(&buf_lst, isnewl, ret));
+		rc = read(fd, buf, BUFFER_SIZE);
+		if (rc < 0)
+		{
+			free(buf);
+			return (ERROR);
+		}
+		if (rc == 0)
+			return (END);
 		buf[rc] = '\0';
-		tmp = ft_strjoin(buf_lst->str, buf);
-		free(buf_lst->str);
-		buf_lst->str = tmp;
+		buf_lst->str = ft_strjoin(buf_lst->str, buf);
+		if (!(buf_lst->str))
+			return (ERROR);
+		free (buf);
 	}
 }
 
-static t_list	*ft_create_lst(int fd, t_list **holder)
+static t_node	*ft_create_lst(int fd, t_node **holder)
 {
-	t_list	*buf_lst;
+	t_node	*buf_lst;
 
-	if (!*holder)
+	if (!(*holder))
 	{
 		buf_lst = ft_lstnew(fd, "");
 		*holder = buf_lst;
 		return (buf_lst);
 	}
 	buf_lst = *holder;
-	while (buf_lst && buf_lst->fd != fd)
+	while (buf_lst)
+	{
+		if (buf_lst->fd == fd)
+			return (buf_lst);
 		buf_lst = buf_lst->next;
-	if (buf_lst)
-		return (buf_lst);
+	}
 	buf_lst = ft_lstnew(fd, "");
+	if (!buf_lst)
+		return (buf_lst);
 	buf_lst->next = *holder;
 	*holder = buf_lst;
 	return (buf_lst);
@@ -106,24 +113,26 @@ static t_list	*ft_create_lst(int fd, t_list **holder)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*holder;
-	t_list			*buf_lst;
-	char			*buf;
+	static t_node	*holder;
+	t_node			*buf_lst;
 	char			*ret;
 	int				status;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
+	if (!holder)
+		holder = NULL;
 	buf_lst = ft_create_lst(fd, &holder);
-	buf = (char *)malloc((size_t)BUFFER_SIZE + 1);
-	if (!buf)
+	if (!buf_lst)
 		return (NULL);
-	ret = NULL;
-	status = ft_read(buf_lst, buf, &ret);
-	free(buf);
-	if ((status == ERROR || status == END))
-		ft_free_buf(&holder, buf_lst);
+	status = ft_read(fd, buf_lst);
 	if (status == ERROR)
+	{
+		ft_free_lst(&holder, buf_lst);
 		return (NULL);
+	}
+	ret = ft_create_ret(buf_lst);
+	if (status == END)
+		ft_free_lst(&holder, buf_lst);
 	return (ret);
 }

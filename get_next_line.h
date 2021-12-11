@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:53 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/10 09:33:45 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 18:04:15 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,22 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-# define SUCCESS 1
-# define END 0
+# define GOOD 1
 # define ERROR -1
+# define END 0
 
-typedef struct s_list
+typedef struct sllist
 {
 	int				fd;
 	char			*str;
-	struct s_list	*next;
-}	t_list;
+	struct sllist	*next;
+}	t_node;
 
-char		*get_next_line(int fd);
-char		*ft_strjoin(char const *s1, char const *s2);
-char		*ft_strndup(const char *src, size_t n);
-char		*ft_strchr(const char *s, int c);
-size_t		ft_strlen(const char *s);
-t_list		*ft_lstnew(int fd, char *content);
-t_list		*ft_setlst(t_list **s_buff, int fd);
+size_t	ft_strlen(const char *s);
+char	*ft_strjoin(const char *s1, const char *s2);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strndup(const char *content, size_t len);
+t_node	*ft_lstnew(int fd, void *content);
+char	*get_next_line(int fd);
 
 #endif

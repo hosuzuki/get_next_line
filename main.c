@@ -66,6 +66,12 @@ int main(int argc, char **argv)
 	printf("<1 charactor : fd4 = %d>\n", fd4);
 	printf("%s", get_next_line(fd4));
 
+	printf("<3 charactors : fd3 = %d>\n", fd3);
+	printf("%s", get_next_line(fd3));
+
+	printf("<1 charactor : fd4 = %d>\n", fd4);
+	printf("%s", get_next_line(fd4));
+
 	close (fd1);
 	close (fd2);
 	close (fd3);
