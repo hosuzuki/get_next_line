@@ -6,23 +6,30 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 11:46:52 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 14:35:22 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static void	ft_free_lst(t_node *holder)
+static void	ft_free_lst(t_node **holder, t_node *buf_lst)
 {
 	t_node	*tmp;
 
-	while (holder)
+	if (!holder || !(*holder))
+		return;
+	if(*holder == buf_lst)
+		*holder = buf_lst->next;
+	else 
 	{
-		tmp = holder->next;
-		free (holder->str);
-		free (holder);
-		holder = tmp;
+		tmp = *holder;
+		while (tmp && tmp->next != buf_lst)
+			tmp = tmp->next;
+		tmp->next = buf_lst->next;
 	}
+	free (buf_lst->str);
+	free (buf_lst);
+	return ;
 }
 
 static char	*ft_create_ret(t_node *buf_lst)
@@ -33,7 +40,11 @@ static char	*ft_create_ret(t_node *buf_lst)
 
 	isnewl = ft_strchr(buf_lst->str, '\n');
 	if (!isnewl)
+	{
+		if (*(buf_lst->str) == '\0')
+			return (NULL);;
 		ret = ft_strndup(buf_lst->str, ft_strlen(buf_lst->str));
+	}
 	else
 	{
 		ret = ft_strndup(buf_lst->str, isnewl - buf_lst->str + 1);
@@ -65,7 +76,7 @@ static int	ft_read(int fd, t_node *buf_lst)
 		}
 		if (rc == 0)
 			return (END);
-		buf[BUFFER_SIZE] = '\0';
+		buf[rc] = '\0';
 		buf_lst->str = ft_strjoin(buf_lst->str, buf);
 		free (buf);
 	}
@@ -82,6 +93,11 @@ static t_node	*ft_create_lst(int fd, t_node **holder)
 		return (buf_lst);
 	}
 	buf_lst = *holder;
+/*	while (buf_lst && buf_lst->fd != fd)
+		buf_lst = buf_lst->next;
+	if (buf_lst)
+		return (buf_lst);
+*/
 	while (buf_lst)
 	{
 		if (buf_lst->fd == fd)
@@ -109,11 +125,11 @@ char	*get_next_line(int fd)
 	status = ft_read(fd, buf_lst);
 	if (status == ERROR)
 	{
-		ft_free_lst(holder);
+		ft_free_lst(&holder, buf_lst);
 		return (NULL);
 	}
 	ret = ft_create_ret(buf_lst);
 	if (status == END)
-		ft_free_lst(holder);
+		ft_free_lst(&holder, buf_lst);
 	return (ret);
 }
