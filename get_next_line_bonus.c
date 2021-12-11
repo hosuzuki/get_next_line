@@ -6,15 +6,15 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 11:38:50 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 11:46:52 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static void	ft_free_lst(node *holder)
+static void	ft_free_lst(t_node *holder)
 {
-	node	*tmp;
+	t_node	*tmp;
 
 	while (holder)
 	{
@@ -25,7 +25,7 @@ static void	ft_free_lst(node *holder)
 	}
 }
 
-static char	*ft_create_ret(node *buf_lst)
+static char	*ft_create_ret(t_node *buf_lst)
 {
 	char	*ret;
 	char	*isnewl;
@@ -44,7 +44,7 @@ static char	*ft_create_ret(node *buf_lst)
 	return (ret);
 }
 
-static int	ft_read(int fd, node *buf_lst)
+static int	ft_read(int fd, t_node *buf_lst)
 {
 	ssize_t	rc;
 	char	*buf;
@@ -71,9 +71,9 @@ static int	ft_read(int fd, node *buf_lst)
 	}
 }
 
-static node	*ft_create_lst(int fd, node **holder)
+static t_node	*ft_create_lst(int fd, t_node **holder)
 {
-	node	*buf_lst;
+	t_node	*buf_lst;
 
 	if (!(*holder))
 	{
@@ -96,8 +96,8 @@ static node	*ft_create_lst(int fd, node **holder)
 
 char	*get_next_line(int fd)
 {
-	static node	*holder;
-	node		*buf_lst;
+	static t_node	*holder;
+	t_node		*buf_lst;
 	char		*ret;
 	int			status;
 

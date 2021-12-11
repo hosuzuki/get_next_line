@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:53 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 11:42:54 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 11:47:20 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ size_t	ft_strlen(const char *s);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strndup(const char *content, size_t len);
-node	*ft_lstnew(int fd, void *content);
+t_node	*ft_lstnew(int fd, void *content);
 char	*get_next_line(int fd);
 
 #endif

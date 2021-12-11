@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:52 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 11:39:44 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/11 11:48:05 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ char	*ft_strndup(const char *s, size_t len)
 	return (dst);
 }
 
-node	*ft_lstnew(int fd, void	*content)
+t_node	*ft_lstnew(int fd, void	*content)
 {
-	node	*buf_lst;
+	t_node	*buf_lst;
 
-	buf_lst = (node *)malloc(sizeof(node));
+	buf_lst = (t_node *)malloc(sizeof(t_node));
 	if (!buf_lst)
 		return (NULL);
 	buf_lst->fd = fd;
