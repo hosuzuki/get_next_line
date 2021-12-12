@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 18:02:30 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/13 05:29:23 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ static int	ft_read(int fd, t_node *buf_lst)
 		if (!buf)
 			return (ERROR);
 		rc = read(fd, buf, BUFFER_SIZE);
-		if (rc < 0)
+		if (rc == -1 || rc == 0)
 		{
 			free(buf);
-			return (ERROR);
-		}
-		if (rc == 0)
+			if (rc == -1)
+				return (ERROR);
 			return (END);
+		}
 		buf[rc] = '\0';
 		buf_lst->str = ft_strjoin(buf_lst->str, buf);
 		if (!(buf_lst->str))
