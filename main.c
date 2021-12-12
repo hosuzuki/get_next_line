@@ -6,6 +6,13 @@
 #include<fcntl.h>
 #include<unistd.h>
 
+void end(void)__attribute__((destructor));
+
+void end(void)
+{
+	system("leaks a.out"); // change the file name accordingly.
+}
+
 int main(int argc, char **argv)
 {
 	int	fd1;
@@ -27,7 +34,6 @@ int main(int argc, char **argv)
 	char	*s11 = NULL;
 	char	*s12 = NULL;
 	char	*s13 = NULL;
-
 
 	if (argc > 1)
 	{
