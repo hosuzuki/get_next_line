@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:53 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 18:04:15 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/13 12:48:48 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # define GOOD 1
 # define ERROR -1
 # define END 0
+
+# define malloc malloc_error
+void	*malloc_error(size_t size);
 
 typedef struct sllist
 {
