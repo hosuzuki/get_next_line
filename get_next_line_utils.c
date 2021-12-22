@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:52 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/22 21:17:08 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/22 22:08:41 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		return (NULL);
 	dst = (char *)malloc(sizeof(char) * ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!dst)
+	{
+		free ((void *)s2);
+		s2 = NULL;
 		return (NULL);
+	}
 	i = 0;
 	j = 0;
 	while (s1[i])
@@ -55,6 +59,8 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	while (s2[j])
 		dst[i++] = s2[j++];
 	dst[i] = '\0';
+	free ((void *)s2);
+	s2 = NULL;
 	return (dst);
 }
 
