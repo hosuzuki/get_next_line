@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:52 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 18:03:10 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/22 21:17:08 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		dst[i] = s1[i];
 		i++;
 	}
-	free ((char *)s1);
 	while (s2[j])
 		dst[i++] = s2[j++];
 	dst[i] = '\0';
@@ -86,6 +85,11 @@ t_node	*ft_lstnew(int fd, void	*content)
 		return (NULL);
 	buf_lst->fd = fd;
 	buf_lst->str = ft_strndup(content, 0);
+	if (!buf_lst->str)
+	{
+		free(buf_lst);
+		return (NULL);
+	}
 	buf_lst->next = NULL;
 	return (buf_lst);
 }
