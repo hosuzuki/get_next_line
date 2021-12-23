@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:52 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/11 11:48:05 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/23 11:03:04 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		return (NULL);
 	dst = (char *)malloc(sizeof(char) * ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!dst)
+	{
+		free ((void *)s2);
 		return (NULL);
+	}
 	i = 0;
 	j = 0;
 	while (s1[i])
@@ -52,10 +55,10 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		dst[i] = s1[i];
 		i++;
 	}
-	free ((char *)s1);
 	while (s2[j])
 		dst[i++] = s2[j++];
 	dst[i] = '\0';
+	free ((void *)s2);
 	return (dst);
 }
 
@@ -86,6 +89,11 @@ t_node	*ft_lstnew(int fd, void	*content)
 		return (NULL);
 	buf_lst->fd = fd;
 	buf_lst->str = ft_strndup(content, 0);
+	if (!buf_lst->str)
+	{
+		free(buf_lst);
+		return (NULL);
+	}
 	buf_lst->next = NULL;
 	return (buf_lst);
 }

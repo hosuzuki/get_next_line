@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:51 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/13 05:31:35 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/23 10:52:35 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ static char	*ft_create_ret(t_node *buf_lst)
 		ret = ft_strndup(buf_lst->str, isnewl - buf_lst->str + 1);
 		tmp = ft_strndup(isnewl + 1, ft_strlen(isnewl + 1));
 		if (!tmp)
+		{
+			free (ret);
 			return (NULL);
+		}
 		free (buf_lst->str);
 		buf_lst->str = tmp;
 	}
@@ -68,8 +71,6 @@ static int	ft_read(int fd, t_node *buf_lst)
 		if (ft_strchr(buf_lst->str, '\n'))
 			return (GOOD);
 		buf = (char *)malloc(sizeof(char) * (size_t)BUFFER_SIZE + 1);
-		if (!buf)
-			return (ERROR);
 		rc = read(fd, buf, BUFFER_SIZE);
 		if (rc == -1 || rc == 0)
 		{
@@ -79,10 +80,11 @@ static int	ft_read(int fd, t_node *buf_lst)
 			return (END);
 		}
 		buf[rc] = '\0';
-		buf_lst->str = ft_strjoin(buf_lst->str, buf);
-		if (!(buf_lst->str))
+		buf = ft_strjoin(buf_lst->str, buf);
+		if (!buf)
 			return (ERROR);
-		free (buf);
+		free (buf_lst->str);
+		buf_lst->str = buf;
 	}
 }
 
@@ -132,7 +134,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	ret = ft_create_ret(buf_lst);
-	if (status == END)
+	if (status == END || ret == NULL)
 		ft_free_lst(&holder, buf_lst);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: hokutosuzuki <hosuzuki@student.42toky      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:17:52 by hokutosuz         #+#    #+#             */
-/*   Updated: 2021/12/22 22:08:41 by hokutosuz        ###   ########.fr       */
+/*   Updated: 2021/12/23 11:03:08 by hokutosuz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	if (!dst)
 	{
 		free ((void *)s2);
-		s2 = NULL;
 		return (NULL);
 	}
 	i = 0;
@@ -60,7 +59,6 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		dst[i++] = s2[j++];
 	dst[i] = '\0';
 	free ((void *)s2);
-	s2 = NULL;
 	return (dst);
 }
 
