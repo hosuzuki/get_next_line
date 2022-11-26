@@ -28,7 +28,26 @@ int main(int argc, char **argv)
 	char	*s12 = NULL;
 	char	*s13 = NULL;
 
-
+	(void)fd1;
+	(void)fd2;
+	(void)fd3;
+	(void)fd4;
+	(void)fd5;
+	(void)fd6;
+	(void)*s1;
+	(void)*s2;
+	(void)*s3;
+	(void)*s4;
+	(void)*s5;
+	(void)*s6;
+	(void)*s7;
+	(void)*s8;
+	(void)*s9;
+	(void)*s10;
+	(void)*s11;
+	(void)*s12;
+	(void)*s13;
+	
 	if (argc > 1)
 	{
 		(void)argv[0];
@@ -36,10 +55,11 @@ int main(int argc, char **argv)
 		printf("%s", get_next_line(0));
 		return (0);
 	}
-
+	
 	printf("<passing 42 as fd>\n");
 	printf("%s\n", get_next_line(42));
 	
+	/*
 	fd1 = open("test/empty", O_RDONLY);
 	printf("<empty : fd1 = %d>\n", fd1);
 	s1 = get_next_line(fd1);
@@ -112,13 +132,13 @@ int main(int argc, char **argv)
 	s13 = get_next_line(fd4);
 	printf("%s", s13);
 	free(s13);
+	*/
 
-	close (fd1);
-	close (fd2);
-	close (fd3);
-	close (fd4);
-	close (fd5);
-	close (fd6);
-
+//	close (fd1);
+//	close (fd2);
+//	close (fd3);
+//	close (fd4);
+//	close (fd5);
+//	close (fd6);
 	return (0);
 }
