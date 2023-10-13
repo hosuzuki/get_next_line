@@ -1,10 +1,9 @@
-#include"get_next_line.h"
-//#include"get_next_line_bonus.h"
-#include<stdio.h>
-#include<sys/types.h>
-#include<sys/stat.h>
-#include<fcntl.h>
-#include<unistd.h>
+#include "get_next_line.h"
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 __attribute__((destructor))
   static void destructor() {
@@ -19,6 +18,7 @@ int main(int argc, char **argv)
 	int	fd4;
 	int	fd5;
 	int	fd6;
+	
 	char	*s1 = NULL;
 	char	*s2 = NULL;
 	char	*s3 = NULL;
@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 	(void)fd4;
 	(void)fd5;
 	(void)fd6;
+
 	(void)*s1;
 	(void)*s2;
 	(void)*s3;
@@ -53,6 +54,9 @@ int main(int argc, char **argv)
 	(void)*s12;
 	(void)*s13;
 	
+	char *str = NULL;
+	printf("NULL: %s", str);
+	
 	if (argc > 1)
 	{
 		(void)argv[0];
@@ -61,48 +65,42 @@ int main(int argc, char **argv)
 		return (0);
 	}
 	
-	printf("<passing 42 as fd>\n");
-	printf("%s\n", get_next_line(42));
-	
-	/*
-	fd1 = open("test/empty", O_RDONLY);
+	fd1 = open("sample/empty", O_RDONLY);
 	printf("<empty : fd1 = %d>\n", fd1);
 	s1 = get_next_line(fd1);
-	printf("%s\n", s1);
+	// printf("%s\n", s1);
 	free (s1);
 	
-	fd2 = open("test/just_nl", O_RDONLY);
+	fd2 = open("sample/just_nl", O_RDONLY);
 	printf("<just new line : fd2 = %d>\n", fd2);
 	s2 = get_next_line(fd2);
-	printf("%s", s2);
+	// printf("%s", s2);
 	free (s2);
 
-	fd3 = open("test/3chara", O_RDONLY);
+	fd3 = open("sample/3chara", O_RDONLY);
 	printf("<3 charactors : fd3 = %d>\n", fd3);
 	s3 = get_next_line(fd3);
 	printf("%s", s3);
 	free(s3);
 
-	fd4 = open("test/1chara", O_RDONLY);
+	fd4 = open("sample/1chara", O_RDONLY);
 	printf("<1 charactor : fd4 = %d>\n", fd4);
 	s4 = get_next_line(fd4);
 	printf("%s", s4);
 	free(s4);
 
-	fd5 = open("test/longletter", O_RDONLY);
+	fd5 = open("sample/longletter", O_RDONLY);
 	printf("<long letter : fd5 = %d>\n", fd5);
 	s5 = get_next_line(fd5);
 	printf("%s", s5);
 	free(s5);
 
-	fd6 = open("test/over2k", O_RDONLY);
+	fd6 = open("sample/over2k", O_RDONLY);
 	printf("<2k+ characters : fd6 = %d>\n", fd6);
 	s6 = get_next_line(fd6);
 	printf("%s", s6);
 	free(s6);
 
-	printf("\n---BONUS---\n");
-		
 	printf("<long letter : fd5 = %d>\n", fd5);
 	s7 = get_next_line(fd5);
 	printf("%s", s7);
@@ -110,12 +108,12 @@ int main(int argc, char **argv)
 
 	printf("<empty : fd1 = %d>\n", fd1);
 	s8 = get_next_line(fd1);
-	printf("%s\n", s8);
+	// printf("%s\n", s8);
 	free(s8);
 
 	printf("<just new line : fd2 = %d>\n", fd2);
 	s9 = get_next_line(fd2);
-	printf("%s", s9);
+	// printf("%s", s9);
 	free(s9);
 
 	printf("<3 charactors : fd3 = %d>\n", fd3);
@@ -137,13 +135,17 @@ int main(int argc, char **argv)
 	s13 = get_next_line(fd4);
 	printf("%s", s13);
 	free(s13);
-	*/
 
-//	close (fd1);
-//	close (fd2);
-//	close (fd3);
-//	close (fd4);
-//	close (fd5);
-//	close (fd6);
+	close (fd1);
+	close (fd2);
+	close (fd3);
+	close (fd4);
+	close (fd5);
+	close (fd6);
+
+	// test to cause Segmantation fault
+	// printf("<passing 42 as fd>\n");
+	// printf("%s\n", get_next_line(42));
+
 	return (0);
 }
