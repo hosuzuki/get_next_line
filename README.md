@@ -37,7 +37,35 @@ The function is written in C language and thus needs the **`gcc` compiler** and 
 
 ### 🌖 Instructions
 
-#### 🌗 Using it in your code
+#### 🌗 Give it a try (use main.c in srcs)
+
+##### 🌘 1. Clone the repository
+```shell
+git clone git@github.com:hosuzuki/get_next_line.git
+```
+
+And them, move to the cloned directory.
+```shell
+cd get_next_line
+```
+
+##### 🌘 2. Compile get_next_line with main.c which has test code
+
+The makefile compiles all files from the ``srcs/`` folders and saves the object files to the ``objs/`` folders. <br>
+It then generates the output file ``gnl``.
+
+```shell
+make     
+```
+
+##### 🌘 3. Run gnl to see the test result
+
+```shell
+./gnl   
+```
+<br><br>
+
+#### 🌗 Using it in your code (use your main.c)
 
 To use the function in your code, simply include its header:
 
@@ -56,61 +84,45 @@ If you're on Linux, you may as well need the following flags:
 ```shell
 -D ARG_MAX="sysconf(_SC_ARG_MAX)" -D OPEN_MAX=1024
 ```
-<br><br>
 
-##### 🌘 example usege
+##### 🌘 example usage
 
 Calling get_next_line in a loop will allow you to read the text available on a file descriptor one line at a time until the EOF.
 
 Call get_next_line from the main
 ```c
+int main(int argc, char **argv)
+{
+	int fd;
+	char *line;
 
-```
-
-### 🌖 Testing
-
-#### 🌗 1. Clone the repository
-```shell
-git clone git@github.com:hosuzuki/get_next_line.git
-```
-
-And them, move to the cloned directory.
-```shell
-cd get_next_line
-```
-
-#### 🌗 2. Compile get_next_line with main.c which has test code
-
-The makefile compiles all files from the ``srcs/`` folders and saves the object files to the ``objs/`` folders. <br>
-It then generates the output file ``gnl``.
-
-```shell
-make     
-```
-
-#### 🌗 3. Run gnl to see the test result
-
-```shell
-./gnl   
+	line = NULL;
+	if (argc == 2)
+	{
+		fd = open(argv[1], O_RDONLY);
+		while ((line = get_next_line(fd)))
+		{
+			printf("%s", line);
+			free(line);
+		}
+		close(fd);
+	}
+}
 ```
 <br><br>
 
 ## 🌕 Test Samples
 
+These files are in the "sample" folder.
 
-* Available txt files
-
-| Filename | Description | Ends with newline | Source |
-| :------: | :---------: | :---------------: | :----: |
-| ``empty.txt`` | Empty file | :x: | N/A |
-| ``test.txt`` | A-Z with several newlines | :heavy_check_mark: | N/A |
-| ``test2.txt`` | Shorter version of ``test.txt`` | :heavy_check_mark: | N/A |
-| ``basic_oneline.txt`` | Single short line A-Z | :x: | N/A |
-| ``the-king-james-bible.txt`` | Very long book (Holy Bible) | :heavy_check_mark: | [Link](https://github.com/ErikSchierboom/sentencegenerator/blob/master/samples/the-king-james-bible.txt) |
-| ``big_line_no_nl.txt`` | Long single-line file (9999 chars) | :x: | [Link](https://github.com/Tripouille/gnlTester/blob/master/files/big_line_no_nl) |
-| ``J. K. Rowling - Harry Potter 1 - Sorcerer's Stone.txt`` | Harry Potter book | :heavy_check_mark: | [Link](https://github.com/amephraim/nlp/blob/master/texts/J.%20K.%20Rowling%20-%20Harry%20Potter%201%20-%20Sorcerer's%20Stone.txt) |
-| ``J. K. Rowling - Harry Potter 3 - Prisoner of Azkaban.txt`` | Harry Potter book | :heavy_check_mark: | [Link](https://github.com/amephraim/nlp/blob/master/texts/J.%20K.%20Rowling%20-%20Harry%20Potter%203%20-%20Prisoner%20of%20Azkaban.txt) |
-
+| Filename       | Description | 
+| :------        | :--------- | 
+| ``1chara``     | One character per line | 
+| ``3chara``     | Three characters per line |
+| ``empty``      | Empty file |
+| ``just_nl``    | Just new lines | 
+| ``longletter`` | Long single-line |
+| ``over2k``     | Very Long single-line file (over 2000 chars) | 
 
 
 [1]: https://42tokyo.jp/
