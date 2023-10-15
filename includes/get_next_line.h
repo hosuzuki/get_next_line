@@ -21,11 +21,11 @@
 # define ERROR -1
 # define END 0
 
-typedef struct sllist
+typedef struct s_node
 {
 	int				fd;
 	char			*str;
-	struct sllist	*next;
+	struct s_node	*next;
 }	t_node;
 
 size_t	ft_strlen(const char *s);
